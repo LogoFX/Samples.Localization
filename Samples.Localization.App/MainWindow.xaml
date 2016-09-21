@@ -1,0 +1,169 @@
+﻿<Window x:Class="Samples.Localization.App.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:markupExtensions="clr-namespace:LogoFX.Client.Mvvm.View.MarkupExtensions;assembly=LogoFX.Client.Mvvm.View.Platform"
+        xmlns:localization="clr-namespace:LogoFX.Client.Mvvm.View.Localization;assembly=LogoFX.Client.Mvvm.View.Platform"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:app="clr-namespace:Samples.Localization.App"
+        xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+        mc:Ignorable="d"
+        d:DataContext="{d:DesignInstance app:MainViewModel}"
+        Title="{markupExtensions:LocalizedString Key=TitleKey, Fallback='Title not found!'}"
+        Height="350" 
+        Width="525">
+    
+    <Window.Resources>
+        <app:EmptyMultiValueConverter x:Key="EmptyMultiValueConverter" />
+    </Window.Resources>
+    
+    <Grid Margin="5">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40" />
+            <RowDefinition Height="40" />
+            <RowDefinition Height="40" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" MinWidth="80" />
+            <ColumnDefinition Width="5" />
+            <ColumnDefinition Width="*" />
+            <!--<ColumnDefinition Width="5" />
+            <ColumnDefinition Width="Auto" MinWidth="80" />-->
+        </Grid.ColumnDefinitions>
+
+        <TextBlock Grid.Row="0"
+                   Grid.Column="0"
+                   VerticalAlignment="Center"
+                   Text="Current Locale" />
+        <ComboBox Grid.Row="0"
+                  Grid.Column="2"
+                  VerticalAlignment="Center"
+                  SelectedValue="{Binding Source={x:Static localization:LocalizationManager.Instance}, Path=CurrentCulture, Mode=TwoWay}"
+                  ItemsSource="{Binding Source={x:Static localization:LocalizationManager.Instance}, Path=AvailableCultures, Mode=OneWay}" />
+
+        <TextBlock Grid.Row="1"
+                   Grid.Column="0"
+                   VerticalAlignment="Center"
+                   Text="{markupExtensions:LocalizedString Key=LoginKey}" />
+        <TextBox Grid.Row="1"
+                 Grid.Column="2" 
+                 VerticalAlignment="Center"
+                 HorizontalAlignment="Stretch" />
+
+        <TextBlock Grid.Row="2"
+                   Grid.Column="0"
+                   VerticalAlignment="Center"
+                   Text="{markupExtensions:LocalizedString Key=PasswordKey}" />
+        <TextBox Grid.Row="2"
+                 Grid.Column="2" 
+                 VerticalAlignment="Center"
+                 HorizontalAlignment="Stretch" />
+        
+        <TextBlock Grid.Row="3"
+                   VerticalAlignment="Center"
+                   HorizontalAlignment="Center"
+                   Text="Dynamic Text">
+            <i:Interaction.Triggers>
+                <!--<app:XMultiDataTrigger>
+                    <app:XMultiDataTrigger.Conditions>
+                        <ei:ComparisonCondition 
+                    </app:XMultiDataTrigger.Conditions>
+                </app:XMultiDataTrigger>-->
+                
+                <app:XPropertyChangedTrigger RespectLoadedEvent="True">
+                    <app:XPropertyChangedTrigger.Binding>
+                        <MultiBinding Converter="{StaticResource EmptyMultiValueConverter}">
+                            <Binding Path="CurrentSessions.Product.Category" Mode="OneWay" />
+                            <Binding Path="IdentityValueZeroLength" Mode="OneWay" />
+                        </MultiBinding>
+                    </app:XPropertyChangedTrigger.Binding>
+                    <i:Interaction.Behaviors>
+                        <ei:ConditionBehavior>
+                            <ei:ConditionalExpression>
+                                <ei:ComparisonCondition LeftOperand="{Binding Path=CurrentSessions.Product.Category, Mode=OneWay}" 
+                                                        Operator="Equal"
+                                                        RightOperand="{x:Static app:CategoryTypes.Load}"/>
+                                <ei:ComparisonCondition LeftOperand="{Binding Path=IdentityValueZeroLength, Mode=OneWay}" 
+                                                        Operator="Equal"
+                                                        RightOperand="False"/>
+                            </ei:ConditionalExpression>
+                        </ei:ConditionBehavior>
+                    </i:Interaction.Behaviors>
+                    <ei:ChangePropertyAction PropertyName="Foreground" Value="Red" />
+                </app:XPropertyChangedTrigger>
+
+
+                <app:XPropertyChangedTrigger RespectLoadedEvent="True">
+                    <app:XPropertyChangedTrigger.Binding>
+                        <MultiBinding Converter="{StaticResource EmptyMultiValueConverter}">
+                            <Binding Path="CurrentSessions.Product.Category" Mode="OneWay" />
+                            <Binding Path="IdentityValueZeroLength" Mode="OneWay" />
+                        </MultiBinding>
+                    </app:XPropertyChangedTrigger.Binding>
+                    <i:Interaction.Behaviors>
+                        <ei:ConditionBehavior>
+                            <ei:ConditionalExpression>
+                                <ei:ComparisonCondition LeftOperand="{Binding Path=CurrentSessions.Product.Category, Mode=OneWay}" 
+                                                        Operator="Equal"
+                                                        RightOperand="{x:Static app:CategoryTypes.None}"/>
+                                <ei:ComparisonCondition LeftOperand="{Binding Path=IdentityValueZeroLength, Mode=OneWay}" 
+                                                        Operator="Equal"
+                                                        RightOperand="False"/>
+                            </ei:ConditionalExpression>
+                        </ei:ConditionBehavior>
+                    </i:Interaction.Behaviors>
+                    <ei:ChangePropertyAction PropertyName="Foreground" Value="Green" />
+                </app:XPropertyChangedTrigger>
+
+                <app:XPropertyChangedTrigger RespectLoadedEvent="True">
+                    <app:XPropertyChangedTrigger.Binding>
+                        <MultiBinding Converter="{StaticResource EmptyMultiValueConverter}">
+                            <Binding Path="CurrentSessions.Product.Category" Mode="OneWay" />
+                            <Binding Path="IdentityValueZeroLength" Mode="OneWay" />
+                        </MultiBinding>
+                    </app:XPropertyChangedTrigger.Binding>
+                    <i:Interaction.Behaviors>
+                        <ei:ConditionBehavior>
+                            <ei:ConditionalExpression>
+                                <ei:ComparisonCondition LeftOperand="{Binding Path=CurrentSessions.Product.Category, Mode=OneWay}" 
+                                                        Operator="Equal"
+                                                        RightOperand="{x:Static app:CategoryTypes.Load}"/>
+                                <ei:ComparisonCondition LeftOperand="{Binding Path=IdentityValueZeroLength, Mode=OneWay}" 
+                                                        Operator="Equal"
+                                                        RightOperand="True"/>
+                            </ei:ConditionalExpression>
+                        </ei:ConditionBehavior>
+                    </i:Interaction.Behaviors>
+                    <ei:ChangePropertyAction PropertyName="Foreground" Value="Blue" />
+                </app:XPropertyChangedTrigger>
+
+
+                <app:XPropertyChangedTrigger RespectLoadedEvent="True">
+                    <app:XPropertyChangedTrigger.Binding>
+                        <MultiBinding Converter="{StaticResource EmptyMultiValueConverter}">
+                            <Binding Path="CurrentSessions.Product.Category" Mode="OneWay" />
+                            <Binding Path="IdentityValueZeroLength" Mode="OneWay" />
+                        </MultiBinding>
+                    </app:XPropertyChangedTrigger.Binding>
+                    <i:Interaction.Behaviors>
+                        <ei:ConditionBehavior>
+                            <ei:ConditionalExpression>
+                                <ei:ComparisonCondition LeftOperand="{Binding Path=CurrentSessions.Product.Category, Mode=OneWay}" 
+                                                        Operator="Equal"
+                                                        RightOperand="{x:Static app:CategoryTypes.None}"/>
+                                <ei:ComparisonCondition LeftOperand="{Binding Path=IdentityValueZeroLength, Mode=OneWay}" 
+                                                        Operator="Equal"
+                                                        RightOperand="True"/>
+                            </ei:ConditionalExpression>
+                        </ei:ConditionBehavior>
+                    </i:Interaction.Behaviors>
+                    <ei:ChangePropertyAction PropertyName="Foreground" Value="DarkGray" />
+                </app:XPropertyChangedTrigger>
+
+            </i:Interaction.Triggers>
+        </TextBlock>
+    </Grid>
+</Window>
